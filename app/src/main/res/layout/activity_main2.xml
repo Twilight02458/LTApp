@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity2">
+    tools:context=".DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,14 +20,28 @@
             android:background="@drawable/sanchauduong2"
             android:scaleType="centerCrop">
 
-            <ImageButton
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btBack"
-                android:layout_width="38dp"
-                android:layout_height="39dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="@color/black"
-                android:src="@drawable/ic_back" />
+                android:background="@drawable/background_oval">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

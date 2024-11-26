@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -9,10 +10,13 @@
     tools:context=".MainActivity">
 
 
-    <LinearLayout
-        android:id="@+id/Trangchu"
+    <FrameLayout
+        android:id="@+id/trang_chu"
         android:layout_width="match_parent"
-        android:layout_height="694dp">
+        android:layout_height="745dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -27,8 +31,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="343dp"
-                    android:background="@drawable/img_1"
+                    android:layout_height="421dp"
+                    android:background="@color/darkblue"
                     android:gravity="end"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -65,98 +69,219 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="121dp"
                         android:orientation="horizontal"
                         android:padding="16dp">
-
 
                         <EditText
                             android:id="@+id/searchEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_weight="1"
-                            android:background="@color/white"
-                            android:hint="Tìm kiếm sân tập, địa điểm" />
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/edittext_background"
+                            android:drawableStart="@drawable/ic_search"
+                            android:drawablePadding="16dp"
+                            android:ems="10"
+                            android:hint="Tìm kiếm địa điểm, sân tập"
+                            android:inputType="text"
+                            android:padding="16dp"
+                            android:textColorHint="#C6C6C6" />
 
-                        <ImageButton
-                            android:id="@+id/searchButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:background="@color/red"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_search" />
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:background="@color/lightgray"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
+                        android:layout_height="90dp"
+                        android:background="@color/lightgray">
 
-                        <ImageView
-                            android:id="@+id/view_football"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:background="@color/red"
-                            android:src="@drawable/ic_football" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardCornerRadius="10dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/txtFootBall"
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_weight="1"
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="127dp"
+                            android:layout_height="67dp"
+                            android:layout_margin="10dp"
                             android:background="@color/white"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:paddingRight="5dp"
-                            android:text="Bóng đá"
-                            android:textColor="@color/blue" />
+                            app:cardCornerRadius="10dp">
 
 
-                        <ImageView
-                            android:id="@+id/view_tennis"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:background="@color/blue"
-                            android:src="@drawable/ic_tennis" />
+                            <LinearLayout
+                                android:layout_width="127dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="10dp"
+                                    android:background="@drawable/background_oval2">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/ic_football"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:ignore="MissingConstraints" />
 
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_weight="1"
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Bóng đá"
+                                    android:textColor="@color/blue"
+                                    android:layout_gravity="center"/>
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="127dp"
+                            android:layout_height="67dp"
+                            android:layout_margin="10dp"
                             android:background="@color/white"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:text="Quần vợt"
-                            android:textColor="#0000FF" />
+                            app:cardCornerRadius="10dp">
 
-                        <ImageView
-                            android:id="@+id/view_badminton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:background="@color/red"
-                            android:src="@drawable/ic_badminton" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="50dp"
-                            android:layout_weight="1"
+                            <LinearLayout
+                                android:layout_width="127dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="10dp"
+                                    android:background="@drawable/background_oval3">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/ic_tennis"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:ignore="MissingConstraints" />
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Quần vợt"
+                                    android:textColor="@color/blue"
+                                    android:layout_gravity="center"/>
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="127dp"
+                            android:layout_height="67dp"
+                            android:layout_margin="10dp"
                             android:background="@color/white"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:text="Cầu lông"
-                            android:textColor="@color/blue" />
+                            app:cardCornerRadius="10dp">
 
 
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="127dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="10dp"
+                                    android:background="@drawable/background_oval2">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/ic_badminton"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:ignore="MissingConstraints" />
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cầu lông"
+                                    android:textColor="@color/blue"
+                                    android:layout_gravity="center"/>
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="127dp"
+                                android:layout_height="67dp"
+                                android:layout_margin="10dp"
+                                android:background="@color/white"
+                                app:cardCornerRadius="10dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="127dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="10dp"
+                                        android:background="@drawable/background_oval3">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/ic_volley"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            tools:ignore="MissingConstraints" />
+
+
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Bóng chuyền"
+                                        android:textColor="@color/blue"
+                                        android:layout_gravity="center"/>
+
+
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
 
                 </LinearLayout>
@@ -660,18 +785,17 @@
         </ScrollView>
 
 
-    </LinearLayout>
+    </FrameLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottommenu"
+        android:id="@+id/bottomMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_gravity="center"
-        android:background="@color/white"
         app:menu="@menu/bottom_navmenu" />
 
 
