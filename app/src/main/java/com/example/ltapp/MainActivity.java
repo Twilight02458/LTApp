@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -75,42 +77,42 @@ public class MainActivity extends AppCompatActivity {
         layout2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity1.class);
                 startActivity(intent);
             }
         });
         layout3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity2.class);
                 startActivity(intent);
             }
         });
         layout4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity3.class);
                 startActivity(intent);
             }
         });
         layout5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity4.class);
                 startActivity(intent);
             }
         });
         layout6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity5.class);
                 startActivity(intent);
             }
         });
         layout7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailActivity6.class);
                 startActivity(intent);
             }
         });
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

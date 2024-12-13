@@ -732,12 +732,6 @@
                                     android:textColor="@color/blue"
                                     android:textSize="11dp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Sân cầu lông"
-                                    android:textColor="@color/blue"
-                                    android:textSize="11dp" />
 
                                 <TextView
                                     android:layout_width="match_parent"

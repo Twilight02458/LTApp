@@ -43,7 +43,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="586dp"
+            android:layout_height="584dp"
             android:layout_gravity="bottom"
             android:background="@color/lightgray"
             android:orientation="vertical">
@@ -52,10 +52,10 @@
             <LinearLayout
                 android:layout_width="364dp"
                 android:layout_height="94dp"
-                android:background="@color/white"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="20dp"
+                android:background="@color/white">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/logout"
@@ -63,9 +63,9 @@
                     android:layout_height="60dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
+                    android:background="@drawable/background_oval"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:background="@drawable/background_oval">
+                    android:focusable="true">
 
 
                     <ImageView
@@ -87,13 +87,22 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"
                     android:text="Đăng xuất"
-                    android:textSize="25dp"/>
+                    android:textSize="25dp" />
 
             </LinearLayout>
 
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        </LinearLayout>
+
 
     </FrameLayout>
+
+
 </LinearLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".BookingActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutfirst"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:background="@color/blue">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btBack"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/background_oval"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="Chọn một ngày"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btnDay1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"/>
+
+        <Button
+            android:id="@+id/btnDay2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"/>
+
+        <Button
+            android:id="@+id/btnDay3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"/>
+
+        <Button
+            android:id="@+id/btnDay4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn giờ"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:padding="10dp"/>
+
+    <GridLayout
+        android:id="@+id/timeGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btnTime1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="17:00 - 18:00"/>
+
+        <Button
+            android:id="@+id/btnTime2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="17:00 - 19:00"/>
+
+        <Button
+            android:id="@+id/btnTime3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="18:00 - 19:00"/>
+
+        <Button
+            android:id="@+id/btnTime4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="07:00 - 08:00"/>
+
+        <Button
+            android:id="@+id/btnTime5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="13:00 - 14:00"/>
+
+        <Button
+            android:id="@+id/btnTime6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/blue"
+            android:text="14:00 - 15:00"/>
+
+    </GridLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/txtTotalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thành tiền: 0đ"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="10dp"/>
+
+    <Button
+        android:id="@+id/btnBook6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đặt sân ngay"
+        android:textColor="@color/white"
+        android:backgroundTint="#FF4081"
+        android:layout_margin="16dp"
+        android:enabled="false"/>
+
+</LinearLayout>

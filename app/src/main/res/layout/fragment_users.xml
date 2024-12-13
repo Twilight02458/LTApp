@@ -20,8 +20,11 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btBack"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:background="@drawable/background_oval">
 
                 <ImageView
