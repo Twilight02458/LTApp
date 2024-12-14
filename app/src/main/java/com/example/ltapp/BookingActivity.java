@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +36,8 @@ public class BookingActivity extends AppCompatActivity {
     private int totalPrice = 0;
     private ConstraintLayout btBack;
     private DatabaseHelper dbHelper;
+    private Map<Button, Set<Button>> dateTimeSelections = new HashMap<>();
+    private Map<Button, Integer> dateTotalPrices = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +76,29 @@ public class BookingActivity extends AppCompatActivity {
         // Set ngày cho các button
         setDatesForButtons();
 
+        // Ẩn tất cả các nút múi giờ khi khởi tạo
+        for (Button timeButton : timeButtons) {
+            timeButton.setVisibility(View.INVISIBLE);
+        }
+
         // Xử lý sự kiện click cho các button ngày
         View.OnClickListener dateClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button clickedButton = (Button) v;
                 
+                // Lưu lựa chọn hiện tại trước khi chuyển ngày
+                if (selectedButton != null) {
+                    dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                    dateTotalPrices.put(selectedButton, totalPrice);
+                }
+
                 if (clickedButton == selectedButton) {
                     // Trở về màu ban đầu khi bỏ chọn
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
                     clickedButton.setTextColor(getResources().getColor(R.color.blue));
                     selectedButton = null;
-                    // Reset tổng tiền khi bỏ chọn ngày
+                    selectedTimeButtons.clear();
                     totalPrice = 0;
                 } else {
                     // Đặt lại màu cho button trước đó
@@ -95,14 +110,30 @@ public class BookingActivity extends AppCompatActivity {
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
                     clickedButton.setTextColor(getResources().getColor(android.R.color.white));
                     selectedButton = clickedButton;
+
+                    // Khôi phục lựa chọn cho ngày được chọn
+                    selectedTimeButtons.clear();
+                    if (dateTimeSelections.containsKey(clickedButton)) {
+                        selectedTimeButtons.addAll(dateTimeSelections.get(clickedButton));
+                        totalPrice = dateTotalPrices.get(clickedButton);
+                    } else {
+                        totalPrice = 0;
+                    }
                 }
 
-                // Reset tất cả các nút giờ về trạng thái unselected
+                // Cập nhật hiển thị của các nút giờ
+                updateTimeButtonsVisibility();
+
+                // Reset hiển thị của tất cả các nút giờ
                 for (Button timeButton : timeButtons) {
-                    timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
-                    timeButton.setTextColor(getResources().getColor(R.color.blue));
+                    if (selectedTimeButtons.contains(timeButton)) {
+                        timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+                        timeButton.setTextColor(getResources().getColor(android.R.color.white));
+                    } else {
+                        timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
+                        timeButton.setTextColor(getResources().getColor(R.color.blue));
+                    }
                 }
-                selectedTimeButtons.clear();
                 
                 updateBookButtonAndPrice();
             }
@@ -117,15 +148,31 @@ public class BookingActivity extends AppCompatActivity {
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
                     clickedButton.setTextColor(getResources().getColor(R.color.blue));
                     selectedTimeButtons.remove(clickedButton);
-                    // Giảm tổng tiền khi bỏ chọn múi giờ
                     totalPrice -= PRICE_PER_SLOT;
+                    
+                    // Cập nhật lựa chọn cho ngày hiện tại
+                    if (selectedButton != null) {
+                        dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                        dateTotalPrices.put(selectedButton, totalPrice);
+                        
+                        // Kích hoạt lại nút ngày nếu không còn múi giờ nào được chọn
+                        if (selectedTimeButtons.isEmpty()) {
+                            selectedButton.setEnabled(true);
+                        }
+                    }
                 } else {
                     // Thêm time slot mới
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
                     clickedButton.setTextColor(getResources().getColor(android.R.color.white));
                     selectedTimeButtons.add(clickedButton);
-                    // Tăng tổng tiền khi chọn thêm múi giờ
                     totalPrice += PRICE_PER_SLOT;
+                    
+                    // Cập nhật lựa chọn cho ngày hiện tại
+                    if (selectedButton != null) {
+                        dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                        dateTotalPrices.put(selectedButton, totalPrice);
+                        selectedButton.setEnabled(false);
+                    }
                 }
                 updateBookButtonAndPrice();
             }
@@ -190,9 +237,21 @@ public class BookingActivity extends AppCompatActivity {
         // Enable/disable nút đặt sân
         btnBook.setEnabled(isDateAndTimeSelected);
         
-        // Cập nhật hiển thị giá tiền
-        if (totalPrice > 0) {
-            String formattedPrice = String.format(Locale.getDefault(), "%,d", totalPrice);
+        // Vô hiệu hóa nút ngày đã chọn nếu có múi giờ được chọn
+        if (!selectedTimeButtons.isEmpty() && selectedButton != null) {
+            selectedButton.setEnabled(false);
+        } else {
+            // Kích hoạt lại tất cả các nút ngày
+            btnDay1.setEnabled(true);
+            btnDay2.setEnabled(true);
+            btnDay3.setEnabled(true);
+            btnDay4.setEnabled(true);
+        }
+        
+        // Cập nhật hiển thị tổng tiền của tất cả các ngày
+        int totalAllDays = calculateTotalPriceAllDays();
+        if (totalAllDays > 0) {
+            String formattedPrice = String.format(Locale.getDefault(), "%,d", totalAllDays);
             txtTotalPrice.setText("Thành tiền: " + formattedPrice + "đ");
         } else {
             txtTotalPrice.setText("Thành tiền: 0đ");
@@ -213,12 +272,16 @@ public class BookingActivity extends AppCompatActivity {
                 timeSlots.append(timeButton.getText().toString());
             }
             
-            // Lưu vào database (court_number = 0 cho sân chính)
+            // Sử dụng tổng tiền của tất cả các ngày
+            int totalAllDays = calculateTotalPriceAllDays();
+            
+            // Lưu vào database với tổng tiền của tất cả các ngày
             long result = dbHelper.addBooking(
                 selectedDate,
                 timeSlots.toString(),
-                totalPrice,
-                0
+                totalAllDays,
+                0,
+                "Sân Châu Dương"
             );
             
             if (result != -1) {
@@ -229,6 +292,23 @@ public class BookingActivity extends AppCompatActivity {
                 // Thông báo lỗi
                 Toast.makeText(this, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    // Thêm phương thức để tính tổng tiền của tất cả các ngày
+    private int calculateTotalPriceAllDays() {
+        int total = 0;
+        for (Integer price : dateTotalPrices.values()) {
+            total += price;
+        }
+        return total;
+    }
+
+    // Thêm phương thức để ẩn/hiện các nút múi giờ
+    private void updateTimeButtonsVisibility() {
+        int visibility = (selectedButton != null) ? View.VISIBLE : View.INVISIBLE;
+        for (Button timeButton : timeButtons) {
+            timeButton.setVisibility(visibility);
         }
     }
 }

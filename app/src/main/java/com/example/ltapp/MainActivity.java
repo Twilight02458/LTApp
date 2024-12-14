@@ -6,6 +6,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
+    private Spinner spinnerCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +45,27 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout7 = findViewById(R.id.layout7);
         LinearLayout layout8 = findViewById(R.id.layout8);
 
+        spinnerCity = findViewById(R.id.spinnerCity);
+        
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.cities, android.R.layout.simple_spinner_item);
+        
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        
+        spinnerCity.setAdapter(adapter);
+        
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCity = parent.getItemAtPosition(position).toString();
+                // Toast.makeText(MainActivity.this, "Đã chọn: " + selectedCity, Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Không cần xử lý
+            }
+        });
 
         binding.bottomMenu.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.btHome) {
@@ -130,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
     }
 
 
