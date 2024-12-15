@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,33 +27,20 @@ public class DetailActivity extends AppCompatActivity {
     private RatingBar ratingInput;
     private Button btnPostComment;
     private List<Comment> comments;
-    private DatabaseHelper dbHelper;
-    private static final int COURT_ID = 1; // ID của sân hiện tại
+    private ConstraintLayout btBack;
+    private Button btnBook;
+    private TextView tvAverageRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail);
-        ConstraintLayout back = findViewById(R.id.btBack);
-        Button book1 = findViewById(R.id.btn_book);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        book1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, BookingActivity.class);
-                startActivity(intent);
-            }
-        });
-        dbHelper = new DatabaseHelper(this);
+        
+        initViews();
+        setupListeners();
         initCommentSection();
-        loadComments(); // Tải comments từ database
+        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -60,12 +48,29 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initCommentSection() {
+    private void initViews() {
+        btBack = findViewById(R.id.btBack);
+        btnBook = findViewById(R.id.btn_book);
         rvComments = findViewById(R.id.rv_comments);
         etComment = findViewById(R.id.et_comment);
         ratingInput = findViewById(R.id.rating_input);
         btnPostComment = findViewById(R.id.btn_post_comment);
+        tvAverageRating = findViewById(R.id.tv_average_rating);
+    }
 
+    private void setupListeners() {
+        btBack.setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        btnBook.setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, BookingActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void initCommentSection() {
         comments = new ArrayList<>();
         commentAdapter = new CommentAdapter(comments);
         
@@ -77,40 +82,42 @@ public class DetailActivity extends AppCompatActivity {
             float rating = ratingInput.getRating();
             
             if (!content.isEmpty()) {
-                // Lưu comment vào database
-                long result = dbHelper.addComment("Người dùng", content, rating, COURT_ID);
+                Comment newComment = new Comment("Người dùng", content, rating);
+                commentAdapter.addComment(newComment);
                 
-                if (result != -1) {
-                    Comment newComment = new Comment("Người dùng", content, rating);
-                    commentAdapter.addComment(newComment);
-                    
-                    // Clear input
-                    etComment.setText("");
-                    ratingInput.setRating(0);
-                    
-                    Toast.makeText(this, "Đã đăng bình luận", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Lỗi khi đăng bình luận", Toast.LENGTH_SHORT).show();
-                }
+                // Clear input
+                etComment.setText("");
+                ratingInput.setRating(0);
+                
+                // Cập nhật rating trung bình
+                updateAverageRating();
+                
+                Toast.makeText(this, "Đã đăng bình luận", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Vui lòng nhập nội dung bình luận", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Thêm một số bình luận mẫu
+        addSampleComments();
+        // Cập nhật rating trung bình ban đầu
+        updateAverageRating();
     }
 
-    private void loadComments() {
-        // Lấy danh sách comments từ database
-        List<Comment> savedComments = dbHelper.getComments(COURT_ID);
-        
-        // Thêm vào adapter
-        for (Comment comment : savedComments) {
-            commentAdapter.addComment(comment);
-        }
+    private void addSampleComments() {
+        comments.add(new Comment("Nguyễn Văn A", "Sân rất đẹp, phục vụ tốt!", 5));
+        comments.add(new Comment("Trần Thị B", "Giá cả hợp lý, sẽ quay lại", 4.5f));
+        comments.add(new Comment("Lê Văn C", "Sân tốt nhưng hơi đông", 4));
+        commentAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (dbHelper != null) {
-            dbHelper.close();
+    private void updateAverageRating() {
+        float totalRating = 0;
+        for (Comment comment : comments) {
+            totalRating += comment.getRating();
         }
+        float averageRating = comments.isEmpty() ? 0 : totalRating / comments.size();
+        String formattedRating = String.format("%.1f", averageRating);
+        tvAverageRating.setText(formattedRating + " ★");
     }
 }
