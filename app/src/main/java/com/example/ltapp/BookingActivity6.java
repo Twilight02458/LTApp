@@ -23,6 +23,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.res.ColorStateList;
 import android.widget.Toast;
+import android.os.StrictMode;
+import android.util.Log;
+import com.example.ltapp.Api.CreateOrder;
+import org.json.JSONObject;
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class BookingActivity6 extends AppCompatActivity {
     private Button btnDay1, btnDay2, btnDay3, btnDay4;
@@ -44,6 +52,14 @@ public class BookingActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_booking);
+
+        // Thêm khởi tạo ZaloPay SDK
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // Khởi tạo ZaloPay SDK
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
 
         btBack = findViewById(R.id.btBack);
         btBack.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +176,71 @@ public class BookingActivity6 extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Thay đổi xử lý click cho nút Book
+        btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("ZaloPay", "Button clicked");
+                CreateOrder orderApi = new CreateOrder();
+                try {
+                    Log.d("ZaloPay", "Creating order...");
+                    JSONObject data = orderApi.createOrder(txtTotalPrice.getText().toString());
+                    String code = data.getString("return_code");
+                    Log.d("ZaloPay", "Return code: " + code);
+                    
+                    if (code.equals("1")) {
+                        String token = data.getString("zp_trans_token");
+                        Log.d("ZaloPay", "Token: " + token);
+                        
+                        if (token == null || token.isEmpty()) {
+                            Log.e("ZaloPay", "Token is null or empty");
+                            return;
+                        }
+                        
+                        ZaloPaySDK.getInstance().payOrder(BookingActivity6.this, token, "demozpdk://app", new PayOrderListener() {
+                            @Override
+                            public void onPaymentSucceeded(String s, String s1, String s2) {
+                                Log.d("ZaloPay", "Payment succeeded");
+                                Intent intent1 = new Intent(BookingActivity6.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Thanh toán thành công!");
+                                startActivity(intent1);
+                                saveBooking();
+                            }
+
+                            @Override
+                            public void onPaymentCanceled(String s, String s1) {
+                                Log.d("ZaloPay", "Payment canceled");
+                                Intent intent1 = new Intent(BookingActivity6.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Hủy thanh toán!");
+                                startActivity(intent1);
+                            }
+
+                            @Override
+                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                Log.e("ZaloPay", "Payment error: " + zaloPayError.toString());
+                                Intent intent1 = new Intent(BookingActivity6.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Lỗi thanh toán!");
+                                startActivity(intent1);
+                            }
+                        });
+                    } else {
+                        Log.e("ZaloPay", "Invalid return code: " + code);
+                    }
+                } catch (Exception e) {
+                    Log.e("ZaloPay", "Error: " + e.getMessage());
+                    e.printStackTrace();
+                    Toast.makeText(BookingActivity6.this, "Có lỗi xảy ra: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    // Thêm phương thức xử lý kết quả thanh toán
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
     }
 
     private void setDatesForButtons() {
@@ -192,13 +273,24 @@ public class BookingActivity6 extends AppCompatActivity {
         
         if (!selectedTimeButtons.isEmpty() && selectedButton != null) {
             selectedButton.setEnabled(false);
+            
+            // Tính tổng tiền cho ngày được chọn
+            int totalForSelectedDate = selectedTimeButtons.size() * PRICE_PER_SLOT;
+            dateTotalPrices.put(selectedButton, totalForSelectedDate);
+            
         } else {
             btnDay1.setEnabled(true);
             btnDay2.setEnabled(true);
             btnDay3.setEnabled(true);
             btnDay4.setEnabled(true);
+            
+            // Xóa giá tiền của ngày không còn được chọn
+            if (selectedButton != null) {
+                dateTotalPrices.remove(selectedButton);
+            }
         }
         
+        // Tính tổng tiền cho tất cả các ngày
         int totalAllDays = calculateTotalPriceAllDays();
         if (totalAllDays > 0) {
             String formattedPrice = String.format(Locale.getDefault(), "%,d", totalAllDays);
