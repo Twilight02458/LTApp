@@ -1,6 +1,9 @@
 package com.example.ltapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DetailActivity extends AppCompatActivity {
     private RecyclerView rvComments;
@@ -30,6 +35,8 @@ public class DetailActivity extends AppCompatActivity {
     private ConstraintLayout btBack;
     private Button btnBook;
     private TextView tvAverageRating;
+    private Button btnYeuThich;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class DetailActivity extends AppCompatActivity {
         ratingInput = findViewById(R.id.rating_input);
         btnPostComment = findViewById(R.id.btn_post_comment);
         tvAverageRating = findViewById(R.id.tv_average_rating);
+        btnYeuThich = findViewById(R.id.btn_yeuthich);
+        sharedPreferences = getSharedPreferences("FavoritePrefs", MODE_PRIVATE);
     }
 
     private void setupListeners() {
@@ -67,6 +76,26 @@ public class DetailActivity extends AppCompatActivity {
         btnBook.setOnClickListener(v -> {
             Intent intent = new Intent(DetailActivity.this, BookingActivity.class);
             startActivity(intent);
+        });
+
+        btnYeuThich.setOnClickListener(v -> {
+            String sanBongInfo = "Sân Châu Dương(Gò Vấp) - 106.000đ/giờ";
+            String sanBongData = sanBongInfo;
+            Set<String> favorites = new HashSet<>(
+                sharedPreferences.getStringSet("favorites", new HashSet<>())
+            );
+            
+            if (favorites.contains(sanBongData)) {
+                favorites.remove(sanBongData);
+                Toast.makeText(this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                btnYeuThich.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
+            } else {
+                favorites.add(sanBongData);
+                Toast.makeText(this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                btnYeuThich.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+            }
+            
+            sharedPreferences.edit().putStringSet("favorites", favorites).apply();
         });
     }
 

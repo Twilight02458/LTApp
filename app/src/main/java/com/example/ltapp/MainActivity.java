@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.btYeuthich) {
-                replaceFragment(new FavoriteFragment());
+                Intent intent = new Intent(this, FavoriteActivity.class);
+                startActivity(intent);
             } else if (item.getItemId() == R.id.btUsers) {
                 Intent intent = new Intent(this, UsersActivity.class);
                 startActivity(intent);

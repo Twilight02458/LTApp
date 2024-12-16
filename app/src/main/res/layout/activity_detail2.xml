@@ -164,11 +164,11 @@
                 android:padding="16dp">
 
                 <Button
-                    android:id="@+id/btn_message"
+                    android:id="@+id/btn_yeuthich2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nhắn tin" />
+                    android:text="Yêu thích" />
 
                 <Button
                     android:id="@+id/btn_booking2"
